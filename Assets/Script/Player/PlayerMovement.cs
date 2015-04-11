@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	private PlayerInput controller;
 	private Rigidbody2D rigidbody2D;
-	public BoxCollider2D collider2D;
+	private BoxCollider2D collider2D;
 	//public PlayerGroundDetection playerDetection;
 	
 	public float maxSpeed = 20f;

@@ -7,7 +7,7 @@ public class PlayerInput : MonoBehaviour
 	public string horizontal = "Horizontal";
 	public string vertical = "Vertical";
 
-	public string fire = "Fire1";
+	public string fire = "Fire";
 	public string jump = "Jump";
 	
 	public bool IsFirePressed()
