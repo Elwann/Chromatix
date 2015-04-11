@@ -7,10 +7,10 @@ public class PlayerMovement : MonoBehaviour {
 	Vector2 velocity;
 
 	//public Transform model;
-
 	private PlayerInput controller;
 	private Rigidbody2D rigidbody2D;
 	private BoxCollider2D collider2D;
+	private PlayerDamage playerDamage;
 	//public PlayerGroundDetection playerDetection;
 	
 	public float maxSpeed = 20f;
@@ -27,27 +27,32 @@ public class PlayerMovement : MonoBehaviour {
 
 	void Awake()
 	{
-		groundLayer = LayerMask.NameToLayer("Ground");
+		groundLayer = 1 << LayerMask.NameToLayer("Ground");
 		collider2D = gameObject.GetComponent<BoxCollider2D>();
 		controller = gameObject.GetComponent<PlayerInput>();
 		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+		playerDamage = gameObject.GetComponent<PlayerDamage>();
 	}
 	
 	void Update()
 	{
-		if(IsGrounded()){
-			GroundMove();
-		} else {
-			AirMove();
-		}
+		if(!playerDamage.IsDead()){
+			if(IsGrounded()){
+				GroundMove();
+			} else {
+				AirMove();
+			}
 
-		velocity.y += gravity;
-		velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+			velocity.y += gravity;
+			velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+		}
 	}
 
 	void FixedUpdate()
 	{
-		rigidbody2D.velocity = new Vector2(velocity.x, velocity.y);
+		if(!playerDamage.IsDead()){
+			rigidbody2D.velocity = new Vector2(velocity.x, velocity.y);
+		}
 	}
 
 	void GroundMove()
@@ -76,8 +81,7 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		Vector2 start = new Vector2(collider2D.bounds.min.x, collider2D.bounds.min.y+0.05f);
 		Vector2 stop = new Vector2(collider2D.bounds.max.x, collider2D.bounds.min.y-0.05f);
-		Debug.DrawLine(start, stop, Color.green);
-		return Physics2D.OverlapArea(stop, start, 1 << groundLayer);
+		return Physics2D.OverlapArea(stop, start, groundLayer);
 
 		/*if(Mathf.Abs ( rigidbody2D.velocity.y ) < 0.1f) {	// Checking floats for exact equality is bad. Also good for platforms that are moving down.
 			

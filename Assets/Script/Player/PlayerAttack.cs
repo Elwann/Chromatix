@@ -46,10 +46,8 @@ public class PlayerAttack : MonoBehaviour {
 
 		// Gestion des tir
 		if(controller.IsFirePressed()){
-			Debug.Log (Time.time - lastFire);
-
 			if(Time.time - lastFire >= fireRate){
-				Debug.Log("TIRER");
+				//Debug.Log("TIRER");
 				Fire(direction);
 			}
 		}
