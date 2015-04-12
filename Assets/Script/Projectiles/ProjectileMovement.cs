@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ProjectileMovement : MonoBehaviour {
 
-	public enum BulletColor{ Red, Green, Blue };
 
 	[Header("Sprite")]
 	public Sprite red;
@@ -55,7 +54,6 @@ public class ProjectileMovement : MonoBehaviour {
 		// Gestion des rebonds
 		if(collision.gameObject.layer == groundLayer){
 			if(bounced >= bounces){
-				Debug.Log(bounced);
 				Destroy(gameObject);
 			}
 			bounced++;

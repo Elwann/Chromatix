@@ -4,8 +4,9 @@ using System.Collections;
 [AddComponentMenu("Chromatix/Player/PlayerMovement")]
 public class PlayerMovement : MonoBehaviour {
 
-	Vector2 velocity;
+	public Vector2 velocity;
 
+	public Animator animator;
 	//public Transform model;
 	private PlayerInput controller;
 	private Rigidbody2D rigidbody2D;
@@ -36,15 +37,17 @@ public class PlayerMovement : MonoBehaviour {
 	
 	void Update()
 	{
-		if(!playerDamage.IsDead()){
-			if(IsGrounded()){
-				GroundMove();
+		if (!playerDamage.IsDead ()) {
+			if (IsGrounded ()) {
+				GroundMove ();
 			} else {
-				AirMove();
+				AirMove ();
 			}
 
 			velocity.y += gravity;
 			velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+
+			animator.SetFloat ("Speed", Mathf.Abs (velocity.x / maxSpeed));
 		}
 	}
 
