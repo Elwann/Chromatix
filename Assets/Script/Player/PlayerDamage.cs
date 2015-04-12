@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerDamage : MonoBehaviour {
 
 	public Animator animator;
+	public int number = 0;
 
 	private bool dead = false;
 	private Rigidbody2D rigidbody2D;

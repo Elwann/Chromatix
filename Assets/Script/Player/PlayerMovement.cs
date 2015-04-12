@@ -108,7 +108,10 @@ public class PlayerMovement : MonoBehaviour {
 			velocity.y = 0;
 
 		float h = controller.Horizontal();
-		transform.localScale = new Vector3(Mathf.Sign(h), 1f ,1f);
+		if (h != 0) {
+			transform.localScale = new Vector3(Mathf.Sign(h), 1f ,1f);
+		}
+
 		velocity += new Vector2(h, 0f) * normalAccel;
 	}
 
