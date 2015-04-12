@@ -22,15 +22,14 @@ public class ProjectileMovement : MonoBehaviour {
 	private int bounced = 0;
 	private int groundLayer;
 
+	void Awake(){
+		groundLayer = LayerMask.NameToLayer("Ground");
+		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
-		groundLayer = LayerMask.NameToLayer("Ground");
-
-		direction += new Vector2(Random.value * spread - spread / 2, Random.value * spread - spread / 2);
-		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-		rigidbody2D.velocity = direction.normalized * speed;
-
 		Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
 	}
 	
@@ -54,9 +53,29 @@ public class ProjectileMovement : MonoBehaviour {
 		// Gestion des rebonds
 		if(collision.gameObject.layer == groundLayer){
 			if(bounced >= bounces){
-				Destroy(gameObject);
+				Explode();
 			}
 			bounced++;
 		} 
+	}
+
+	public void Launch(Vector2 dir){
+		Debug.Log (dir);
+		direction = dir;
+		direction += new Vector2(Random.value * spread - spread / 2, Random.value * spread - spread / 2);
+		rigidbody2D.velocity = direction.normalized * speed;
+	}
+
+	public void Explode(){
+		Destroy(gameObject);
+	}
+
+	public void SetColor(BulletColor col){
+		color = col;
+		switch(col){
+			case BulletColor.Red: spriteRenderer.sprite = red; break;
+			case BulletColor.Green: spriteRenderer.sprite = green; break;
+			case BulletColor.Blue: spriteRenderer.sprite = blue; break;
+		}
 	}
 }

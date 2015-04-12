@@ -5,11 +5,11 @@ public class PlayerAttack : MonoBehaviour {
 
 	private PlayerInput controller;
 	private PlayerMovement movement;
+	private PlayerPoints player;
 
 	public Transform gun;
 	public Transform spawn;
 	public ProjectileMovement bullet;
-	public BulletColor currentBulletColor = BulletColor.Red;
 
 	public float fireRate = 1f;
 	public float backFire = 1f;
@@ -32,7 +32,7 @@ public class PlayerAttack : MonoBehaviour {
 		lastFire = Time.time;
 		controller = gameObject.GetComponent<PlayerInput>();
 		movement = gameObject.GetComponent<PlayerMovement>();
-
+		player = gameObject.GetComponent<PlayerPoints>();
 	}
 
 	// Update is called once per frame
@@ -76,7 +76,9 @@ public class PlayerAttack : MonoBehaviour {
 		} else {
 			b.transform.localEulerAngles = new Vector3(0f, 0f, -rotation);
 		}
-		b.direction = direction;
+
+		b.SetColor(GameManager.Instance.GetCurrentColor(player.tableId));
+		b.Launch(direction);
 
 		// On donne de l'effet au personnage
 		GameManager.Instance.shake.ShakeCamera(0.15f, 4f, new Vector3(direction.x, direction.y, 0f));
