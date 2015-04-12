@@ -39,8 +39,10 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		if (!playerDamage.IsDead ()) {
 			if (IsGrounded ()) {
+				animator.SetBool("Air", false);
 				GroundMove ();
 			} else {
+				animator.SetBool("Air", true);
 				AirMove ();
 			}
 
@@ -55,6 +57,8 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		if(!playerDamage.IsDead()){
 			rigidbody2D.velocity = new Vector2(velocity.x, velocity.y);
+		} else {
+			rigidbody2D.velocity = Vector2.zero;
 		}
 	}
 

@@ -8,6 +8,7 @@ public class PlayerDefense : MonoBehaviour {
 	private PlayerMovement movement;
 
 	public Transform shield;
+	public Animator shieldAnimator;
 	public SpriteRenderer shieldRenderer;
 	public BoxCollider2D boxCollider;
 
@@ -59,7 +60,7 @@ public class PlayerDefense : MonoBehaviour {
 				red = GereColorHit(bullet, red);
 				break;
 
-			case BulletColor.Green: 
+			case BulletColor.Green:
 				shieldRenderer.color = new Color(shieldRenderer.color.a, 0f, shieldRenderer.color.b);
 				green = GereColorHit(bullet, green);
 				break;
@@ -69,6 +70,11 @@ public class PlayerDefense : MonoBehaviour {
 				blue = GereColorHit(bullet, blue);
 				break;
 		}
+		
+		if(!red && !green && !blue){
+			boxCollider.enabled = false;
+			shieldAnimator.SetBool("Destroyed", true);
+		}
 	}
 
 	bool GereColorHit(ProjectileMovement bullet, bool col){
@@ -76,12 +82,6 @@ public class PlayerDefense : MonoBehaviour {
 			bullet.Explode();
 		} else {
 			bullet.Launch(direction);
-		}
-
-		if(!red && !green && !blue){
-			boxCollider.enabled = false;
-			shieldRenderer.enabled = false;
-			//damage.TakeDamage();
 		}
 
 		return false;

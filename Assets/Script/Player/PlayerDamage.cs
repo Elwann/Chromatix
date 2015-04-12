@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerDamage : MonoBehaviour {
-
+	public PlayerPoints points;
 	public Animator animator;
 	public int number = 0;
 
@@ -12,22 +12,25 @@ public class PlayerDamage : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		points = gameObject.GetComponent<PlayerPoints>();
 		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 	}
 
 	public void TakeDamage(){
+		if(!dead) GameManager.Instance.Spawn(points.tableId);
+		
 		dead = true;
 		//Time.timeScale = 0.1f;
 		
 		float dir = transform.localScale.x;
 		
-		rigidbody2D.gravityScale = 0.3f;
-		rigidbody2D.fixedAngle = false;
+		//rigidbody2D.gravityScale = 0.3f;
+		//rigidbody2D.fixedAngle = false;
 		//rigidbody2D.angularVelocity = 30f*dir;
-		rigidbody2D.AddForce(new Vector2(0.1f*dir, 0.3f));
+		//rigidbody2D.AddForce(new Vector2(0.1f*dir, 0.3f));
 		//rigidbody2D.AddTorque(30f * dir);
 		
-		//rigidbody2D.velocity = Vector2.zero;
+		rigidbody2D.velocity = Vector2.zero;
 		
 		animator.SetFloat("Speed", 0);
 		animator.SetBool("Dead", true);
