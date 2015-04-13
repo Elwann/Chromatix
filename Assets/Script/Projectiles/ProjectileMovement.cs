@@ -9,6 +9,7 @@ public class ProjectileMovement : MonoBehaviour {
 	public Sprite green;
 	public Sprite blue;
 
+	public Transform rotationable;
 	public SpriteRenderer spriteRenderer;
 	
 	[Header("Vitesse")]
@@ -26,26 +27,14 @@ public class ProjectileMovement : MonoBehaviour {
 		groundLayer = LayerMask.NameToLayer("Ground");
 		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
 	}
-
-	// Use this for initialization
-	void Start ()
-	{
-		//Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
-	}
 	
-	// Update is called once per frame
 	void Update ()
-	{
-
-	}
-
-	void FixedUpdate ()
 	{
 		float rotation = Vector2.Angle(rigidbody2D.velocity, -Vector2.up);
 		if(rigidbody2D.velocity.x < 0){
 			rotation = -rotation;
 		}
-		rigidbody2D.MoveRotation(rotation);
+		rotationable.localEulerAngles = new Vector3(0f, 0f, rotation);
 	}
 
 	void OnCollisionEnter2D(Collision2D collision)
@@ -60,7 +49,6 @@ public class ProjectileMovement : MonoBehaviour {
 	}
 
 	public void Launch(Vector2 dir){
-
 		direction = dir;
 		direction += new Vector2(Random.value * spread - spread / 2, Random.value * spread - spread / 2);
 		rigidbody2D.velocity = direction.normalized * speed;

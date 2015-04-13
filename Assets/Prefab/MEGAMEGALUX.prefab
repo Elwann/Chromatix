@@ -183,7 +183,7 @@ GameObject:
   - 4: {fileID: 487050}
   - 212: {fileID: 21299330}
   - 95: {fileID: 9588822}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Shield 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   - 4: {fileID: 447646}
   - 114: {fileID: 11484738}
   - 61: {fileID: 6186158}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   - 4: {fileID: 490800}
   - 58: {fileID: 5800804}
   - 114: {fileID: 11444804}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}

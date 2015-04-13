@@ -71,11 +71,11 @@ public class PlayerAttack : MonoBehaviour {
 
 	void Fire(){
 		// On tire le projectile
-		ProjectileMovement b = (ProjectileMovement)Instantiate(bullet, spawn.position, gun.rotation);
+		ProjectileMovement b = (ProjectileMovement)Instantiate(bullet, spawn.position, new Quaternion());
 		if(transform.localScale.x > 0f){
-			b.transform.localEulerAngles = new Vector3(0f, 0f, rotation);
+			b.rotationable.localEulerAngles = new Vector3(0f, 0f, rotation);
 		} else {
-			b.transform.localEulerAngles = new Vector3(0f, 0f, -rotation);
+			b.rotationable.localEulerAngles = new Vector3(0f, 0f, -rotation);
 		}
 
 		b.SetColor(GameManager.Instance.GetCurrentColor(player.tableId));

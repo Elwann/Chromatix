@@ -20,7 +20,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &171202
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -34,6 +34,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &192400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 455342}
+  m_Layer: 10
+  m_Name: model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &412100
 Transform:
   m_ObjectHideFlags: 1
@@ -41,11 +56,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130504}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.57999992, y: 0, z: 0}
+  m_LocalPosition: {x: -4.38800001, y: -.165999994, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 455342}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &455342
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192400}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 470986}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 412100}
   m_RootOrder: 0
 --- !u!4 &470986
 Transform:
@@ -53,11 +81,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171202}
-  m_LocalRotation: {x: 0, y: 0, z: -.707106829, w: .707106709}
-  m_LocalPosition: {x: 0, y: .200000003, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -1.62920685e-07}
+  m_LocalPosition: {x: .165999994, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 412100}
+  m_Father: {fileID: 455342}
   m_RootOrder: 0
 --- !u!50 &5043250
 Rigidbody2D:
@@ -73,7 +101,7 @@ Rigidbody2D:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!58 &5845836
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -102,6 +130,7 @@ MonoBehaviour:
   red: {fileID: 21300000, guid: 3f0a6c334fcaa884fb8153c3870a45ec, type: 3}
   green: {fileID: 21300000, guid: 62fecb887aefadf4b88dd4e694089c8b, type: 3}
   blue: {fileID: 21300000, guid: 53d2d15bcda5e5c4f9c073b8565d8e47, type: 3}
+  rotationable: {fileID: 455342}
   spriteRenderer: {fileID: 21239256}
   color: 0
   direction: {x: 0, y: 0}
