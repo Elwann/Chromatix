@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
 		get{
 			if(instance == null){
 				instance = GameObject.FindObjectOfType<GameManager>();
-				DontDestroyOnLoad(instance.gameObject);
+				//DontDestroyOnLoad(instance.gameObject);
 			}
 			
 			return instance;
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour {
 	void Awake(){
 		if(instance == null){
 			instance = this;
-			DontDestroyOnLoad(this);
+			//DontDestroyOnLoad(this);
 		} else {
 			if(this != instance) Destroy(this.gameObject);
 		}
@@ -120,5 +120,9 @@ public class GameManager : MonoBehaviour {
 	public void RemovePoint(int id){
 		points[id]++;
 		scores[id].text = NumberToRoman(points[id]);
+	}
+
+	public void ResetGame(){
+		Application.LoadLevel(Application.loadedLevel);
 	}
 }

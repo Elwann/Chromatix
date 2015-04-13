@@ -16,7 +16,7 @@ public class PlayerInput : MonoBehaviour
 	{
 		playerDamage = gameObject.GetComponent<PlayerDamage>();
 	}
-	
+
 	public bool IsFirePressed()
 	{
 		return (!playerDamage.IsDead() && Input.GetButton(fire));
@@ -39,6 +39,6 @@ public class PlayerInput : MonoBehaviour
 
 	public bool IsJumpDown()
 	{
-			return (!playerDamage.IsDead() && Input.GetButtonDown(jump));
+		return (!playerDamage.IsDead() && Input.GetButtonDown(jump));
 	}
 }

@@ -62,6 +62,7 @@ public class PlayerAttack : MonoBehaviour {
 
 		// Gestion des tir
 		if(controller.IsFirePressed()){
+			Debug.Log ("Coucou");
 			if(Time.time - lastFire >= fireRate && currentRafaleNumber < rafaleNumber){
 				Fire();
 			}
@@ -78,7 +79,7 @@ public class PlayerAttack : MonoBehaviour {
 		}
 
 		b.SetColor(GameManager.Instance.GetCurrentColor(player.tableId));
-		b.Launch(direction);
+		b.Launch(direction, player);
 
 		// On donne de l'effet au personnage
 		GameManager.Instance.shake.ShakeCamera(0.15f, 4f, new Vector3(direction.x, direction.y, 0f));

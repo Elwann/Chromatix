@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ProjectileMovement : MonoBehaviour {
-
+	public PlayerPoints points;
 
 	[Header("Sprite")]
 	public Sprite red;
@@ -30,7 +30,7 @@ public class ProjectileMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
+		//Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
 	}
 	
 	// Update is called once per frame
@@ -60,10 +60,15 @@ public class ProjectileMovement : MonoBehaviour {
 	}
 
 	public void Launch(Vector2 dir){
-		Debug.Log (dir);
+
 		direction = dir;
 		direction += new Vector2(Random.value * spread - spread / 2, Random.value * spread - spread / 2);
 		rigidbody2D.velocity = direction.normalized * speed;
+	}
+
+	public void Launch(Vector2 dir, PlayerPoints points){
+		this.points = points;
+		Launch(dir);
 	}
 
 	public void Explode(){

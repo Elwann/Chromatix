@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update()
 	{
 		if (!playerDamage.IsDead ()) {
+
 			if (IsGrounded ()) {
 				animator.SetBool("Air", false);
 				GroundMove ();
