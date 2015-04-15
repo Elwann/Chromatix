@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 409644}
   - 212: {fileID: 21249964}
   - 95: {fileID: 9557442}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: IMPACT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 421652}
-  m_Layer: 0
+  - 114: {fileID: 11401192}
+  m_Layer: 8
   m_Name: Lazershoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +52,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 170224}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.5799999, y: 7.86999989, z: 0}
+  m_LocalPosition: {x: 6.91599989, y: 3.16000009, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 409644}
@@ -74,6 +75,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11401192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf7c847a47a34349aeed3da4e911ab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyTime: 1
 --- !u!212 &21249964
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -97,7 +110,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 9ddbb5c6cf9556348b2044029e6db8bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000

@@ -19,19 +19,19 @@ public class ProjectileMovement : MonoBehaviour {
 	public float spread = 1f;
 	public int bounces = 3;
 
-	private Rigidbody2D rigidbody2D;
+	private Rigidbody2D rigidbody2d;
 	private int bounced = 0;
 	private int groundLayer;
 
 	void Awake(){
 		groundLayer = LayerMask.NameToLayer("Ground");
-		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+		rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
 	}
 	
 	void Update ()
 	{
-		float rotation = Vector2.Angle(rigidbody2D.velocity, -Vector2.up);
-		if(rigidbody2D.velocity.x < 0){
+		float rotation = Vector2.Angle(rigidbody2d.velocity, -Vector2.up);
+		if(rigidbody2d.velocity.x < 0){
 			rotation = -rotation;
 		}
 		rotationable.localEulerAngles = new Vector3(0f, 0f, rotation);
@@ -51,7 +51,7 @@ public class ProjectileMovement : MonoBehaviour {
 	public void Launch(Vector2 dir){
 		direction = dir;
 		direction += new Vector2(Random.value * spread - spread / 2, Random.value * spread - spread / 2);
-		rigidbody2D.velocity = direction.normalized * speed;
+		rigidbody2d.velocity = direction.normalized * speed;
 	}
 
 	public void Launch(Vector2 dir, PlayerPoints points){
@@ -60,6 +60,16 @@ public class ProjectileMovement : MonoBehaviour {
 	}
 
 	public void Explode(){
+		float rotation = Vector2.Angle(rigidbody2d.velocity, -Vector2.up);
+		if(rigidbody2d.velocity.x < 0){ rotation = -rotation; }
+		GameObject go = Instantiate(GameManager.Instance.explosion, transform.position, Quaternion.AngleAxis(30, Vector3.forward)) as GameObject;
+		SpriteRenderer sprite = go.GetComponentInChildren<SpriteRenderer>();
+
+		switch(color){
+			case BulletColor.Red: sprite.color = new Color(255f,0f,0f); break;
+			case BulletColor.Green: sprite.color = new Color(0f,255f,0f); break;
+			case BulletColor.Blue: sprite.color = new Color(0f,0f,255f); break;
+		}
 		Destroy(gameObject);
 	}
 

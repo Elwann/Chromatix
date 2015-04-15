@@ -9,8 +9,7 @@ public class PlayerMovement : MonoBehaviour {
 	public Animator animator;
 	//public Transform model;
 	private PlayerInput controller;
-	private Rigidbody2D rigidbody2D;
-	private BoxCollider2D collider2D;
+	private Rigidbody2D rigidbody2d;
 	private PlayerDamage playerDamage;
 	//public PlayerGroundDetection playerDetection;
 	
@@ -21,17 +20,13 @@ public class PlayerMovement : MonoBehaviour {
 	//public float turnMul = 2f;
 	
 	public float initialJumpSpeed = 50f;
-	bool groundedLastFrame = false;
-
-	bool pressed = false;
-
 
 	void Awake()
 	{
 		groundLayer = 1 << LayerMask.NameToLayer("Ground");
-		collider2D = gameObject.GetComponent<BoxCollider2D>();
+		//groundLayer = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Player"));
 		controller = gameObject.GetComponent<PlayerInput>();
-		rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+		rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
 		playerDamage = gameObject.GetComponent<PlayerDamage>();
 	}
 	
@@ -40,135 +35,75 @@ public class PlayerMovement : MonoBehaviour {
 		if (!playerDamage.IsDead ()) {
 
 			if (IsGrounded ()) {
-				animator.SetBool("Air", false);
+				animator.SetBool ("Air", false);
 				GroundMove ();
 			} else {
-				animator.SetBool("Air", true);
+				animator.SetBool ("Air", true);
 				AirMove ();
 			}
 
 			velocity.y += gravity;
-			velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
-
+			velocity.x = Mathf.Clamp (velocity.x, -maxSpeed, maxSpeed);
 			animator.SetFloat ("Speed", Mathf.Abs (velocity.x / maxSpeed));
-		}
+		} 
 	}
 
 	void FixedUpdate()
 	{
 		if(!playerDamage.IsDead()){
-			rigidbody2D.velocity = new Vector2(velocity.x, velocity.y);
+			rigidbody2d.velocity = new Vector2(velocity.x, velocity.y);
 		} else {
-			rigidbody2D.velocity = Vector2.zero;
+			rigidbody2d.velocity = Vector2.zero;
 		}
 	}
 
 	void GroundMove()
 	{
-		velocity.y = 0;
-
-		float h = controller.Horizontal();
-		if(h != 0){
-			transform.localScale = new Vector3(Mathf.Sign(h), 1f ,1f);
-			velocity += new Vector2(h, 0f) * normalAccel;
-		} else {
-			velocity = Vector2.zero;
-		}
-
-		// Start jump from ground
-		if (controller.IsJumpPressed()) {
-			//Debug.Log(controller.IsJumpDown());
-			velocity.y = initialJumpSpeed;
-			return;
-		} else {
+		if (!playerDamage.IsDead ()) {
 			velocity.y = 0;
+
+			float h = controller.Horizontal ();
+			if (h != 0) {
+				transform.localScale = new Vector3 (Mathf.Sign (h), 1f, 1f);
+				velocity += new Vector2 (h, 0f) * normalAccel;
+			} else {
+				velocity = Vector2.zero;
+			}
+
+			// Start jump from ground
+			if (controller.IsJumpPressed ()) {
+				//Debug.Log(controller.IsJumpDown());
+				velocity.y = initialJumpSpeed;
+				return;
+			} else {
+				velocity.y = 0;
+			}
 		}
 	}
 
 	bool IsGrounded()
 	{
-		Vector2 start = new Vector2(collider2D.bounds.min.x, collider2D.bounds.min.y+0.05f);
-		Vector2 stop = new Vector2(collider2D.bounds.max.x, collider2D.bounds.min.y-0.05f);
-		return Physics2D.OverlapArea(stop, start, groundLayer);
+		Vector2 start = new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f); 
+		//Vector2 start = new Vector2(collider2D.bounds.min.x, collider2D.bounds.min.y+0.05f);
+		Vector2 stop = new Vector2(transform.position.x + 0.5f, transform.position.y - 0.6f); 
+		//Vector2 stop = new Vector2(collider2D.bounds.max.x, collider2D.bounds.min.y-0.05f);
+		Debug.DrawRay(start, stop - start, Color.green);
 
-		/*if(Mathf.Abs ( rigidbody2D.velocity.y ) < 0.1f) {	// Checking floats for exact equality is bad. Also good for platforms that are moving down.
-			
-			// Since it's possible for our velocity to be exactly zero at the apex of our jump,
-			// we actually require two zero velocity frames in a row.
-			
-			if(groundedLastFrame)
-				return true;
-			
-			groundedLastFrame = true;
-		} else {
-			groundedLastFrame = false;
-		}
-		
-		return false;*/
+		return Physics2D.OverlapArea(stop, start, groundLayer);
 	}
 
 	void AirMove()
 	{
-		if ((velocity.y > 0) && (!controller.IsJumpPressed()))
-			velocity.y = 0;
+		if (!playerDamage.IsDead ()) {
+			if ((velocity.y > 0) && (!controller.IsJumpPressed ()))
+				velocity.y = 0;
 
-		float h = controller.Horizontal();
-		if (h != 0) {
-			transform.localScale = new Vector3(Mathf.Sign(h), 1f ,1f);
+			float h = controller.Horizontal ();
+			if (h != 0) {
+				transform.localScale = new Vector3 (Mathf.Sign (h), 1f, 1f);
+			}
+
+			velocity += new Vector2 (h, 0f) * normalAccel;
 		}
-
-		velocity += new Vector2(h, 0f) * normalAccel;
 	}
-
-	/*
-	
-	float MaxHorizontalSpeed() {
-		if (playerInput.IsBoostPressed()) return boostMaxHorizSpeed;
-		return normMaxHorizSpeed;
-	}
-	
-	float walkAccel() {
-		if (playerInput.IsBoostPressed()) return boostAccel;
-		return normalAccel;
-	}
-	
-	bool walk() {
-		float sign = 0;
-		
-		if (playerInput.IsRightPressed()) sign = 1;
-		else if (playerInput.IsLeftPressed()) sign = -1;
-		else return false;
-		
-		float currSign = Mathf.Sign(velocity.x);
-		float v = walkAccel();
-		if ((currSign != 0) && (currSign != sign))
-			v *= turnMul;
-		velocity.x += v * sign * Time.deltaTime * 60;
-		return true;
-	}
-	
-	void airControls() {
-		// Abort jump if user lets go of button 
-		if ((velocity.y > 0) && (!playerInput.IsJumpPressed()))
-			velocity.y = 0;
-		
-		// Air walk
-		walk();
-	}
-	
-	void groundControls() {
-		velocity.y = 0;
-		
-		// Start jump from ground
-		if (playerInput.IsJumpPressed()) {
-			velocity.y = initialJumpSpeed;
-			return;
-		} else {
-			velocity.y = 0;
-		}
-		
-		// Run on ground 
-		if (!walk())
-			velocity.x = 0;
-	}*/
 }

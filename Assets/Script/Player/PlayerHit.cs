@@ -13,9 +13,11 @@ public class PlayerHit : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D collision)
 	{
-		if(collision.gameObject.layer == bulletLayer){
-			playerDamage.TakeDamage(collision.gameObject.GetComponent<ProjectileMovement>() as ProjectileMovement);
-			Destroy(collision.gameObject);
+		if(!playerDamage.IsDead()){
+			if(collision.gameObject.layer == bulletLayer){
+				playerDamage.TakeDamage(collision.gameObject.GetComponent<ProjectileMovement>() as ProjectileMovement);
+				Destroy(collision.gameObject);
+			}
 		}
 	}
 }

@@ -19,26 +19,26 @@ public class PlayerInput : MonoBehaviour
 
 	public bool IsFirePressed()
 	{
-		return (!playerDamage.IsDead() && Input.GetButton(fire));
+		return (playerDamage != null && !playerDamage.IsDead() && Input.GetButton(fire));
 	}
 	
 	public float Horizontal()
 	{
-		return (!playerDamage.IsDead())? Input.GetAxis(horizontal) : 0;
+		return (playerDamage != null && !playerDamage.IsDead())? Input.GetAxis(horizontal) : 0;
 	}
 	
 	public float Vertical()
 	{
-		return (!playerDamage.IsDead())? Input.GetAxis(vertical) : 0;
+		return (playerDamage != null && !playerDamage.IsDead())? Input.GetAxis(vertical) : 0;
 	}
 	
 	public bool IsJumpPressed()
 	{
-		return (!playerDamage.IsDead() && Input.GetButton(jump));
+		return (playerDamage != null && !playerDamage.IsDead() && Input.GetButton(jump));
 	}
 
 	public bool IsJumpDown()
 	{
-		return (!playerDamage.IsDead() && Input.GetButtonDown(jump));
+		return (playerDamage != null && !playerDamage.IsDead() && Input.GetButtonDown(jump));
 	}
 }

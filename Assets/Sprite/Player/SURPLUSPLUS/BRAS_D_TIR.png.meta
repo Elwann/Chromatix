@@ -43,13 +43,13 @@ TextureImporter:
   alignment: 9
   spritePivot: {x: .448484659, y: .735329211}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 128
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: 
+  spritePackingTag: PLAYER
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -62,7 +62,6 @@ public class PlayerAttack : MonoBehaviour {
 
 		// Gestion des tir
 		if(controller.IsFirePressed()){
-			Debug.Log ("Coucou");
 			if(Time.time - lastFire >= fireRate && currentRafaleNumber < rafaleNumber){
 				Fire();
 			}

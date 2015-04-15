@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerDefense : MonoBehaviour {
 
 	private PlayerInput controller;
-	private PlayerDamage damage;
-	private PlayerMovement movement;
+	//private PlayerDamage damage;
+	//private PlayerMovement movement;
 
 	public Transform shield;
 	public Animator shieldAnimator;
@@ -26,8 +26,8 @@ public class PlayerDefense : MonoBehaviour {
 	void Start ()
 	{
 		controller = gameObject.GetComponent<PlayerInput>();
-		movement = gameObject.GetComponent<PlayerMovement>();
-		damage = gameObject.GetComponent<PlayerDamage>();
+		//movement = gameObject.GetComponent<PlayerMovement>();
+		//damage = gameObject.GetComponent<PlayerDamage>();
 	}
 
 	// Update is called once per frame

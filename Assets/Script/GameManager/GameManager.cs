@@ -11,12 +11,17 @@ public class GameManager : MonoBehaviour {
 	public Transform[] spawnPoint;
 
 	[Header("Bullets")]
+	public GameObject explosion;
 	public float colorChangeTime;
 	private BulletColor[] colors = new BulletColor[]{BulletColor.Red, BulletColor.Green, BulletColor.Blue};
 	private int[] currentColor;
 	private float lastColorChanged = 0f;
 
 	[Header("Interface")]
+	public float focusWidth = 200f;
+	public RectTransform focusUI;
+	public RectTransform focusUILeft;
+	public RectTransform focusUIRight;
 	public Text[] scores;
 	public Text toNextColor;
 	private string[] numbers = new string[]{ "0", "I", "II",  "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
@@ -124,5 +129,17 @@ public class GameManager : MonoBehaviour {
 
 	public void ResetGame(){
 		Application.LoadLevel(Application.loadedLevel);
+	}
+
+	public void FocusUI(float x){
+		//Screen.width;
+		focusUILeft.sizeDelta = new Vector2(x - focusWidth / 2f, focusUILeft.sizeDelta.y);
+		focusUIRight.sizeDelta = new Vector2((Camera.main.pixelWidth - x) - focusWidth / 2f, focusUILeft.sizeDelta.y);
+
+		focusUI.gameObject.SetActive(true);
+	}
+
+	public void UnFocusUI(){
+		focusUI.gameObject.SetActive(false);
 	}
 }
