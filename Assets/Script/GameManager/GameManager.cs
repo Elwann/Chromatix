@@ -118,12 +118,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void AddPoint(int id){
-		points[id]++;
+		++points[id];
 		scores[id].text = NumberToRoman(points[id]);
 	}
 
 	public void RemovePoint(int id){
-		points[id]++;
+		if(points[id] > 0)
+			--points[id];
 		scores[id].text = NumberToRoman(points[id]);
 	}
 

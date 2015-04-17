@@ -15,7 +15,15 @@ public class GUIMenu : MonoBehaviour {
 	
 	}
 
-	public void LogoShake(){
-		cameraShake.ShakeCamera(4f, 7f, new Vector3());
+	public void LogoShake(float intensity){
+		cameraShake.ShakeCamera(intensity, 7f, new Vector3());
+	}
+
+	public void Play(){
+		Application.LoadLevel("main");
+	}
+
+	public void Quit(){
+		Application.Quit();
 	}
 }
