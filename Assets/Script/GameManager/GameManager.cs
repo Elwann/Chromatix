@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
 	public Text[] scores;
 	public Text toNextColor;
 	private string[] numbers = new string[]{ "0", "I", "II",  "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
+	public GameObject menu;
 
 	[Header("Raccourcis")]
 	public CameraShake shake;
@@ -54,11 +55,17 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		StartLevel ();
+
+		// On affiche le menu si le jeu est en pause
+		if(IsPaused()){
+			menu.SetActive(true);
+		} else {
+			menu.SetActive(false);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 		//Time to next color
 		float colTime = GetTimeToNextColor();
 		// Affiche color
@@ -66,6 +73,18 @@ public class GameManager : MonoBehaviour {
 		// Change color
 		if(colTime <= 0f){
 			ChangeColor();
+		}
+
+
+		//Pause game
+		// TODO: Controller Input
+		//if(Input.GetKeyDown(KeyCode.Escape) || (Input.GetButtonDown("Start")) || (Input.GetButtonDown("Start2"))){
+		if(Input.GetKeyDown(KeyCode.Escape)){
+			if(!IsPaused()){
+				Pause ();
+			} else {
+				Resume();
+			}
 		}
 	}
 
@@ -142,5 +161,23 @@ public class GameManager : MonoBehaviour {
 
 	public void UnFocusUI(){
 		focusUI.gameObject.SetActive(false);
+	}
+
+	public void Pause(){
+		Time.timeScale = 0f;
+		menu.SetActive(true);
+	}
+
+	public void Resume(){
+		Time.timeScale = 1f;
+		menu.SetActive(false);
+	}
+
+	public bool IsPaused(){
+		return (Time.timeScale == 0f);
+	}
+
+	public void Quit(){
+		Application.Quit();
 	}
 }
