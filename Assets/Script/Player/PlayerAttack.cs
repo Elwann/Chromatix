@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerAttack : MonoBehaviour {
 
 	private PlayerInput controller;
-	private PlayerMovement movement;
+	private Rigidbody2D rigidbody2d;
 	private PlayerPoints player;
 
 	public Transform gun;
@@ -31,7 +31,7 @@ public class PlayerAttack : MonoBehaviour {
 	{
 		lastFire = Time.time;
 		controller = gameObject.GetComponent<PlayerInput>();
-		movement = gameObject.GetComponent<PlayerMovement>();
+		rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
 		player = gameObject.GetComponent<PlayerPoints>();
 	}
 
@@ -81,8 +81,10 @@ public class PlayerAttack : MonoBehaviour {
 		b.Launch(direction, player);
 
 		// On donne de l'effet au personnage
-		GameManager.Instance.shake.ShakeCamera(0.15f, 4f, new Vector3(direction.x, direction.y, 0f));
-		movement.velocity -= direction.normalized * backFire;
+		GameManager.Instance.shake.ShakeCamera(0.3f, 4f, new Vector3(direction.x*2f, direction.y*2f, 0f));
+
+
+		rigidbody2d.velocity -= direction.normalized * backFire;
 
 		//On setup les timer de tir
 		if (currentRafaleNumber == 0)

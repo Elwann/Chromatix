@@ -3,107 +3,145 @@ using System.Collections;
 
 [AddComponentMenu("Chromatix/Player/PlayerMovement")]
 public class PlayerMovement : MonoBehaviour {
+	public class GroundState
+	{
+		private GameObject player;
+		private float  width;
+		private float height;
+		private float length;
 
-	public Vector2 velocity;
+		private int groundLayer;
+		
+		//GroundState constructor.  Sets offsets for raycasting.
+		public GroundState(GameObject playerRef)
+		{
+			groundLayer = 1 << LayerMask.NameToLayer("Ground");
+
+			player = playerRef;
+
+			Collider2D collider2d = player.GetComponent<Collider2D>();
+			width = collider2d.bounds.extents.x + 0.1f;
+			height = collider2d.bounds.extents.y + 0.2f;
+
+			length = 0.05f;
+		}
+		
+		//Returns whether or not player is touching wall.
+		public bool isWall()
+		{
+			bool left = Physics2D.Raycast(new Vector2(player.transform.position.x - width, player.transform.position.y), -Vector2.right, length, groundLayer);
+			bool right = Physics2D.Raycast(new Vector2(player.transform.position.x + width, player.transform.position.y), Vector2.right, length, groundLayer);
+
+			//Debug.DrawRay (new Vector2(player.transform.position.x - width, player.transform.position.y),  -Vector2.right, Color.yellow);
+			
+			if(left || right)
+				return true;
+			else
+				return false;
+		}
+		
+		//Returns whether or not player is touching ground.
+		public bool isGround()
+		{
+			bool bottom1 = Physics2D.Raycast(new Vector2(player.transform.position.x, player.transform.position.y - height), -Vector2.up, length, groundLayer);
+			bool bottom2 = Physics2D.Raycast(new Vector2(player.transform.position.x + (width - 0.2f), player.transform.position.y - height), -Vector2.up, length, groundLayer);
+			bool bottom3 = Physics2D.Raycast(new Vector2(player.transform.position.x - (width - 0.2f), player.transform.position.y - height), -Vector2.up, length, groundLayer);
+
+			//Debug.DrawRay (new Vector2(player.transform.position.x, player.transform.position.y - height), -Vector2.up, Color.yellow);
+			//Debug.Log (bottom1);
+
+			if(bottom1 || bottom2 || bottom3)
+				return true;
+			else
+				return false;
+		}
+		
+		//Returns whether or not player is touching wall or ground.
+		public bool isTouching()
+		{
+			if(isGround() || isWall())
+				return true;
+			else
+				return false;
+		}
+		
+		//Returns direction of wall.
+		public int wallDirection()
+		{
+			bool left = Physics2D.Raycast(new Vector2(player.transform.position.x - width, player.transform.position.y), -Vector2.right, length, groundLayer);
+			bool right = Physics2D.Raycast(new Vector2(player.transform.position.x + width, player.transform.position.y), Vector2.right, length, groundLayer);
+			
+			if(left)
+				return -1;
+			else if(right)
+				return 1;
+			else
+				return 0;
+		}
+	}
 
 	public Animator animator;
-	//public Transform model;
 	private PlayerInput controller;
 	private Rigidbody2D rigidbody2d;
 	private PlayerDamage playerDamage;
-	//public PlayerGroundDetection playerDetection;
-	
-	public float maxSpeed = 20f;
-	public float normalAccel = 1f;
-	public float gravity = -9.81f;
-	int groundLayer;
-	//public float turnMul = 2f;
-	
-	public float initialJumpSpeed = 50f;
+
+	public float    speed = 14f;
+	public float    accel = 6f;
+	public float airAccel = 3f;
+	public float     jump = 14f;
+
+	private Vector2 input;
+	private GroundState groundState;
 
 	void Awake()
 	{
-		groundLayer = 1 << LayerMask.NameToLayer("Ground");
-		//groundLayer = (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Player"));
 		controller = gameObject.GetComponent<PlayerInput>();
 		rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
 		playerDamage = gameObject.GetComponent<PlayerDamage>();
+		groundState = new GroundState(transform.gameObject);
 	}
 	
 	void Update()
 	{
-		if (!playerDamage.IsDead ()) {
-
-			if (IsGrounded ()) {
-				animator.SetBool ("Air", false);
-				GroundMove ();
-			} else {
-				animator.SetBool ("Air", true);
-				AirMove ();
+		if (!playerDamage.IsDead ())
+		{
+			input.x = controller.Horizontal();
+			
+			if(controller.IsJumpDown())
+				input.y = 1;
+			
+			//Reverse player if going different direction
+			if(input.x != 0){
+				transform.localScale = new Vector3 (Mathf.Sign (input.x), 1f, 1f);
 			}
 
-			velocity.y += gravity;
-			velocity.x = Mathf.Clamp (velocity.x, -maxSpeed, maxSpeed);
-			animator.SetFloat ("Speed", Mathf.Abs (velocity.x / maxSpeed));
-		} 
+			if(groundState.isTouching()){
+				animator.SetBool ("Air", false);
+			} else {
+				animator.SetBool ("Air", true);
+			}
+
+			animator.SetFloat ("Speed", Mathf.Abs (rigidbody2d.velocity.x / speed));
+		}
+		else
+		{
+			input.x = 0f;
+			input.y = 0f;
+		}
 	}
 
 	void FixedUpdate()
 	{
-		if(!playerDamage.IsDead()){
-			rigidbody2d.velocity = new Vector2(velocity.x, velocity.y);
-		} else {
-			rigidbody2d.velocity = Vector2.zero;
+		rigidbody2d.AddForce(new Vector2(((input.x * speed) - rigidbody2d.velocity.x) * (groundState.isGround() ? accel : airAccel), 0)); //Move player.
+		rigidbody2d.velocity = new Vector2((input.x == 0 && groundState.isGround()) ? 0 : rigidbody2d.velocity.x, (input.y == 1 && groundState.isTouching()) ? jump : rigidbody2d.velocity.y);//Stop player if input.x is 0 (and grounded) and jump if input.y is 1
+
+		if(groundState.isWall() && !groundState.isGround() && input.y == 1)
+			rigidbody2d.velocity = new Vector2(-groundState.wallDirection() * speed * 0.75f, rigidbody2d.velocity.y); //Add force negative to wall direction (with speed reduction)
+
+		if (!groundState.isTouching() && !controller.IsJumpPressed () && rigidbody2d.velocity.y > 0f) {
+			rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, 0f);
 		}
-	}
-
-	void GroundMove()
-	{
-		if (!playerDamage.IsDead ()) {
-			velocity.y = 0;
-
-			float h = controller.Horizontal ();
-			if (h != 0) {
-				transform.localScale = new Vector3 (Mathf.Sign (h), 1f, 1f);
-				velocity += new Vector2 (h, 0f) * normalAccel;
-			} else {
-				velocity = Vector2.zero;
-			}
-
-			// Start jump from ground
-			if (controller.IsJumpPressed ()) {
-				//Debug.Log(controller.IsJumpDown());
-				velocity.y = initialJumpSpeed;
-				return;
-			} else {
-				velocity.y = 0;
-			}
-		}
-	}
-
-	bool IsGrounded()
-	{
-		Vector2 start = new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f); 
-		//Vector2 start = new Vector2(collider2D.bounds.min.x, collider2D.bounds.min.y+0.05f);
-		Vector2 stop = new Vector2(transform.position.x + 0.5f, transform.position.y - 0.6f); 
-		//Vector2 stop = new Vector2(collider2D.bounds.max.x, collider2D.bounds.min.y-0.05f);
-		Debug.DrawRay(start, stop - start, Color.green);
-
-		return Physics2D.OverlapArea(stop, start, groundLayer);
-	}
-
-	void AirMove()
-	{
-		if (!playerDamage.IsDead ()) {
-			if ((velocity.y > 0) && (!controller.IsJumpPressed ()))
-				velocity.y = 0;
-
-			float h = controller.Horizontal ();
-			if (h != 0) {
-				transform.localScale = new Vector3 (Mathf.Sign (h), 1f, 1f);
-			}
-
-			velocity += new Vector2 (h, 0f) * normalAccel;
-		}
+		
+		input.y = 0;
 	}
 }

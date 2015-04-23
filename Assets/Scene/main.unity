@@ -1081,8 +1081,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 634014199}
   - 212: {fileID: 634014200}
-  - 111: {fileID: 634014201}
   - 95: {fileID: 634014202}
+  - 111: {fileID: 634014201}
   m_Layer: 0
   m_Name: BG_LUM
   m_TagString: Untagged
@@ -1136,7 +1136,7 @@ Animation:
   m_GameObject: {fileID: 634014198}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 957ecb49673feb740ae2a7adc891e6c8, type: 2}
+  m_Animation: {fileID: 0}
   m_Animations: []
   m_WrapMode: 0
   m_PlayAutomatically: 1

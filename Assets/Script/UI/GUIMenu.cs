@@ -4,10 +4,11 @@ using System.Collections;
 public class GUIMenu : MonoBehaviour {
 
 	public CameraShake cameraShake;
+	public GameObject controlsUI;
 
 	// Use this for initialization
 	void Start () {
-	
+		controlsUI.SetActive (false);
 	}
 	
 	// Update is called once per frame
@@ -25,5 +26,13 @@ public class GUIMenu : MonoBehaviour {
 
 	public void Quit(){
 		Application.Quit();
+	}
+
+	public void OpenControls(){
+		controlsUI.SetActive (true);
+	}
+
+	public void CloseControls(){
+		controlsUI.SetActive (false);
 	}
 }
